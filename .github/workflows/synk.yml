@@ -3,7 +3,7 @@ name: Snyk Security Check
 on:
   push:
     branches:
-      - feature
+      - dev
       - master  # Change to your default branch name if needed
 jobs:
   snyk-test:
