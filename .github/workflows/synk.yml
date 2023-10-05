@@ -3,7 +3,7 @@ name: Snyk Security Check
 on:
   push:
     branches:
-      - feature
+      - dev
       - master  # Change to your default branch name if needed
 jobs:
   snyk-test:
@@ -26,7 +26,7 @@ jobs:
         run: npm install -g snyk
 
       - name: Authenticate Snyk
-         run: snyk auth ${{ secrets.SYNK_KEY }}
+        run: snyk auth ${{ secrets.SYNK_KEY }}
  
 
       - name: Run Snyk Test
