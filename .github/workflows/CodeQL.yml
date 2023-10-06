@@ -21,4 +21,5 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           queries: /src/CodeQL/sql-injection.ql
-          languages: java
+          paths: |
+            /aidevsecopsdemo/src/
