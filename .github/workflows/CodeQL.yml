@@ -7,41 +7,18 @@ on:
 
       - master  # Change to your default branch name if needed
 
-
 jobs:
-  analyze:
+  codeql-analysis:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v1
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
         with:
-          java-version: 11
-
-      - name: Install CodeQL CLI
-        run: |
-          wget https://github.com/github/codeql-cli-binaries/releases/download/${CODEQL_VERSION}/codeql-linux64.zip
-          unzip codeql-linux64.zip
-          sudo mv codeql /usr/local/bin/
-        env:
-          CODEQL_VERSION: "latest"  # Replace with the desired CodeQL version
-
-      - name: Build with Gradle (or Maven, Ant, etc.)
-        run: ./gradlew build  # Adjust this command based on your build tool
-
-      - name: Initialize CodeQL database
-        run: codeql database create . --language=java --source-root=src/main/
-
-      - name: Run CodeQL analysis
-        run: codeql analyze --sarif --output=results/codeql-sarif.sarif
-
-      - name: Check for SQL Injection Vulnerabilities
-        run: |
-          # Fail the workflow if CodeQL finds any results with the label "taint-analysis/sink".
-          if grep -q "taint-analysis/sink" results/codeql-sarif.sarif; then
-            echo "Potential SQL injection vulnerabilities found. Check the CodeQL results for details."
-            exit 1
-          fi
+          query: .codeql-sql-injection-query.qls
+          languages: java
