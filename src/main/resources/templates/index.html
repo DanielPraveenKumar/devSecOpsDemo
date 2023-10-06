@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head lang="en">
-    <title>CoffeeShop</title>
+    <title>Expleo</title>
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
   </head>
   <body>
-    <div class="container">
+    <div class="container-body">
 
-<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-
-
+        <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+        <div th:replace="fragments/productsTable :: productsTable"></div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p> <a href="#">Expleo</a> © 2023 </p>
+                    </div>
+                    <div class="col-lg-6 text-end link">
+                        <ul>
+                            <li> <a href="#">Terms</a> </li>
+                            <li> <a href="#">Privacy</a> </li>
+                            <li> <a href="#">Support</a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   </body>
 </html>

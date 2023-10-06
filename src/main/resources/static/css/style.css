@@ -1,3 +1,77 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap');
+body{
+  font-family: 'Montserrat', sans-serif !important;
+}
 .orderLine {
   margin-bottom: 20px;
 }
+.navbar.navbar-default{
+  background-color: #0c0814;
+  border: none;
+  border-radius: 0;
+}
+.navbar.navbar-default .navbar-header .navbar-brand{
+  padding:0 1rem;
+  display:flex;
+  align-items:center;
+  color:#fff;
+}
+.navbar.navbar-default .navbar-header .navbar-brand svg{
+  padding:0 1rem 0 0;
+  width: Max(calc(100vw/9 - calc(1440px - 100vw)/3),100px);
+}
+.navbar.navbar-default .navbar-header .navbar-brand svg{
+  padding:0 1rem 0 0;
+  width: Max(calc(100vw/9 - calc(1440px - 100vw)/3),100px);
+}
+.navbar.navbar-default .collapse.navbar-collapse a{color:#fff;}
+.container-body{
+  height: Max(calc(100vh - calc(49px)));
+}
+.container-body .panel .panel-heading {
+  background-color: #dadada;
+}
+.container-body .panel .panel-heading .panel-title{
+  font-weight: 600;
+}
+.container-body .panel .panel-heading .lead{
+  font-weight: 600;
+}
+.container-body .panel .panel-body {
+  background-color: #fafafa;
+}
+.container-body .btn-success {
+  color: #fff;
+  background-color: #6846C6;
+  border-color: #6846C6;
+}
+.navbar.navbar-default .collapse.navbar-collapse ul .login-btn a{
+  color: #fff;
+  background-color: #6846C6;
+  border-color: #6846C6;
+  border-radius: 1.5rem;
+  padding: 0.5rem 2rem;
+  margin: 1rem 0;
+}
+.container-body .panel .panel-body form input{
+  border-radius:0.25rem;
+  border: 1px solid #ccc;
+  padding:0.25rem;
+}
+.container-body .panel .panel-body form input[type=submit]{
+  color: #fff;
+  background-color: #6846C6;
+  border: 1px solid #6846C6;
+  padding: 0.25rem 1rem;
+  border-radius: 4px;
+}
+
+.form-group a{color: #0c0814;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding:1.5rem 0;z-index:1;position:relative;background:#0c0814;clear:both;}
+.footer-bottom ul{padding:0;margin:0;}
+.footer-bottom ul li{display:inline-block;margin-left:15px;}
+.footer-bottom p{margin:0;}
+.footer-bottom p,.footer-bottom a{color:#adb5bd;}
+.footer-bottom a{font-size:14px;}
+.footer-bottom a:hover{color:#fff;}
+.text-end{text-align:right!important;}
