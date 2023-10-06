@@ -20,6 +20,4 @@ jobs:
       - name: Run CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
-          queries: /src/CodeQL/sql-injection.ql
-          paths: |
-            /aidevsecopsdemo/src/
+          queries: .
