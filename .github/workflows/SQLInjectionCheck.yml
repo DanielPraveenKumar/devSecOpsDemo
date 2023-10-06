@@ -26,5 +26,5 @@ jobs:
               echo "Quality Gate Status: failed"
               exit 1
             fi
-          env:
+        env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
