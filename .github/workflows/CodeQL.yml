@@ -7,6 +7,7 @@ on:
 
       - master  # Change to your default branch name if needed
 
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
@@ -15,10 +16,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
-      - name: Build CodeQL database
+      - name: Install CodeQL CLI
+        run: |
+          wget https://github.com/github/codeql-cli-binaries/releases/download/${CODEQL_VERSION}/codeql-linux64.zip
+          unzip codeql-linux64.zip
+          sudo mv codeql /usr/local/bin/
+        env:
+          CODEQL_VERSION: "latest"  # Replace with the desired CodeQL version
+
+      - name: Build with Gradle (or Maven, Ant, etc.)
+        run: ./gradlew build  # Adjust this command based on your build tool
+
+      - name: Initialize CodeQL database
         run: codeql database create . --language=java --source-root=src/main/
 
       - name: Run CodeQL analysis
