@@ -26,6 +26,7 @@ public class SearchRepository {
         //create a native query from the string query and execute it
         List<Product> products = em.createNativeQuery(query, Product.class).getResultList();
         return products;
+
     }
 
 
