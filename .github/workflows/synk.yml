@@ -1,0 +1,54 @@
+
+name: Snyk Security Check
+on:
+  push:
+    branches:
+      - dev
+
+      - master  # Change to your default branch name if needed
+
+jobs:
+  snyk-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+
+        with:
+          java-version: 11
+          distribution: 'adopt'  # You can adjust the Java version as needed
+
+
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SYNK_KEY }}
+
+
+      - name: Run Snyk Test
+        run: snyk test --all-projects --all-projects-subpath=src/main/java/org/workshop/coffee/repository/
+
+
+
+
+      - name: Check Snyk Test Results
+        run: |
+
+          snyk_test_exit_code=$?
+
+          if [ $snyk_test_exit_code -eq 0 ]; then
+
+            echo "Snyk test passed, no vulnerabilities found."
+
+          else
+
+            echo "Snyk test failed, vulnerabilities found."
+
+            exit 1
+
+          fi
