@@ -31,7 +31,7 @@ jobs:
 
 
       - name: Run Snyk Test
-        run: snyk test --all-projects --all-projects-subpath=.src/main/
+        run: snyk test --all-projects --all-projects-subpath=src/main/java/org/workshop/coffee/repository/
 
 
 
