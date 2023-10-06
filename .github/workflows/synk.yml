@@ -31,7 +31,10 @@ jobs:
 
 
       - name: Run Snyk Test
-        run: snyk test --all-projects
+        run: snyk test --all-projects --all-projects-subpath=.src/main/
+
+
+
 
       - name: Check Snyk Test Results
         run: |
