@@ -1,0 +1,42 @@
+
+name: SQL Injection Testing
+
+on:
+  push:
+    branches:
+      - dev
+
+      - master  # Change to your default branch name if needed
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+
+        uses: actions/checkout@v2
+
+
+
+      - name: Install and Configure SQLMap
+
+        run: |
+
+          wget https://github.com/sqlmapproject/sqlmap/archive/master.zip
+
+          unzip master.zip
+
+          cd sqlmap-master
+
+
+
+      - name: SQL Injection Testing
+
+        run: |
+
+          python sqlmap.py -u https://github.com/Ragavendira1/aidevsecopsdemo -p vulnerable-param --batch --level 5 --risk 3
