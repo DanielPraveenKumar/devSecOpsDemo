@@ -1,44 +1,30 @@
-
-name: SQL Injection Testing
+name: SonarQube Scan
 
 on:
   push:
     branches:
       - dev
-      - master  # Change to your default branch name if needed
+      - master
 
 jobs:
-  build:
+  sonarqube_scan:
     runs-on: ubuntu-latest
-
-
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-
-
-      - name: Download and Extract SQLMap
+      - name: Check SonarCloud Quality Gate Status
         run: |
-          wget https://github.com/sqlmapproject/sqlmap/archive/master.zip
-          unzip master.zip
-          cd sqlmap-master
-          ls  # List the contents of the directory to verify sqlmap.py is present
+            sonar_project_key='Ragavendira1_aidevsecopsdemo'
+            sonar_quality_gate_status=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" \
+            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${sonar_project_key}")
+              pass_percentage_threshold=100  # Define your desired threshold here
 
-
-
-      - name: Check Directory Contents
-        run: |
-          ls -R  # List all files and directories recursively for debugging
-
-      - name: SQL Injection Testing
-        run: |
-          cd sqlmap-master
-          python sqlmap.py -u https://github.com/Ragavendira1/aidevsecopsdemo/src/main/java/org/workshop/coffee/repository/SearchRepository.java -p vulnerable-param --batch --level 5 --risk 3
-          
-
-
-
-
-
+            if [[ $(echo "$sonar_quality_gate_status" | jq -r '.projectStatus.status') == "OK" ]]; then
+            echo "Quality Gate Status: passed"
+            else
+              echo "Quality Gate Status: failed"
+              exit 1
+            fi
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
