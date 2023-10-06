@@ -1,0 +1,31 @@
+name: CodeQL Analysis
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+
+      - name: Build CodeQL database
+        run: codeql database create . --language=java --source-root=src/main/
+
+      - name: Run CodeQL analysis
+        run: codeql database analyze . --language=java --format=sarif-latest --output=results/codeql-sarif.sarif
+
+      - name: Check for SQL Injection Vulnerabilities
+        run: |
+          # Fail the workflow if CodeQL finds any results with the label "taint-analysis/sink".
+          if grep -q "taint-analysis/sink" results/codeql-sarif.sarif; then
+            echo "Potential SQL injection vulnerabilities found. Check the CodeQL results for details."
+            exit 1
+          fi
