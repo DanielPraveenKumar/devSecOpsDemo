@@ -7,7 +7,6 @@ on:
 
       - master  # Change to your default branch name if needed
 
-
 jobs:
   analyze:
     runs-on: ubuntu-latest
@@ -17,13 +16,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
 
       - name: Build CodeQL database
-        run: codeql database create . --language=java --source-root=src/main/
+        run: codeql database create . --language=java --source-root=your/package/path
 
       - name: Run CodeQL analysis
-        run: codeql database analyze . --language=java --format=sarif-latest --output=results/codeql-sarif.sarif
+        run: codeql analyze --sarif --output=results/codeql-sarif.sarif
 
       - name: Check for SQL Injection Vulnerabilities
         run: |
