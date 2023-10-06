@@ -6,7 +6,7 @@ body{
   margin-bottom: 20px;
 }
 .navbar.navbar-default{
-  background-color: #6846C6;
+  background-color: #0c0814;
   border: none;
   border-radius: 0;
 }
@@ -29,10 +29,10 @@ body{
   height: Max(calc(100vh - calc(49px)));
 }
 .container-body .panel .panel-heading {
-
+  background-color: #dadada;
 }
 .container-body .panel .panel-heading .panel-title{
-
+  font-weight: 600;
 }
 .container-body .panel .panel-body {
   background-color: #fafafa;
@@ -41,6 +41,14 @@ body{
   color: #fff;
   background-color: #6846C6;
   border-color: #6846C6;
+}
+.navbar.navbar-default .collapse.navbar-collapse ul .login-btn a{
+  color: #fff;
+  background-color: #6846C6;
+  border-color: #6846C6;
+  border-radius: 1.5rem;
+  padding: 0.5rem 2rem;
+  margin: 1rem 0;
 }
 .form-group a{color: #0c0814;}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding:1.5rem 0;z-index:1;position:relative;background:#0c0814;clear:both;}
