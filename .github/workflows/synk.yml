@@ -33,8 +33,6 @@ jobs:
       - name: Run Snyk Test
         run: snyk test --all-projects
 
- 
-
       - name: Check Snyk Test Results
         run: |
 
