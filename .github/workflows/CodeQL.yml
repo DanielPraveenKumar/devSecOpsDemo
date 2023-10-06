@@ -1,9 +1,12 @@
 name: CodeQL Analysis
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - dev
+
+      - master  # Change to your default branch name if needed
+
 
 jobs:
   analyze:
