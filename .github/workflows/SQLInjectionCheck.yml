@@ -35,7 +35,7 @@ jobs:
       - name: SQL Injection Testing
         run: |
           cd sqlmap-master
-          python sqlmap.py -u https://github.com/Ragavendira1/aidevsecopsdemo/src/main/resources -p vulnerable-param --batch --level 5 --risk 3
+          python sqlmap.py -u https://github.com/Ragavendira1/aidevsecopsdemo/src/main/java/ -p vulnerable-param --batch --level 5 --risk 3
           
 
 
