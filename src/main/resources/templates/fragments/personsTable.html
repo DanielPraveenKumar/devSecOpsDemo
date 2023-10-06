@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <body>
     <div th:fragment="personsTable" class="container">
+      <div class="container">
       <div class="panel panel-default">
         <div class="panel-heading">
           <a th:href="@{/persons/add}" class="btn btn-success pull-right">
@@ -45,6 +46,7 @@
             </tr>
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   </body>

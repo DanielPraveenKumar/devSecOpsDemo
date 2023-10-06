@@ -45,6 +45,11 @@ body{
   background-color: #6846C6;
   border-color: #6846C6;
 }
+.btn-primary{
+  color: #fff;
+  background-color: #6846C6;
+  border-color: #6846C6;
+}
 .navbar.navbar-default .collapse.navbar-collapse ul .login-btn a{
   color: #fff;
   background-color: #6846C6;
@@ -65,7 +70,12 @@ body{
   padding: 0.25rem 1rem;
   border-radius: 4px;
 }
-
+.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary{
+  background-color: #805ce5;
+  border-color: #805ce5;
+}
+.margin-right{margin-right:1rem !important;}
+.margin-left{margin-left:1rem !important;}
 .form-group a{color: #0c0814;}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding:1.5rem 0;z-index:1;position:relative;background:#0c0814;clear:both;}
 .footer-bottom ul{padding:0;margin:0;}

@@ -5,22 +5,41 @@
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
 </head>
 <body>
-<div class="container">
+<div class="container-body">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-body">
 
-      <a th:href="@{/orders/myorders/export.yaml}" class="btn btn-primary btn-sm pull-right">Export YAML</a>
-        <a th:href="@{/orders/myorders/export.xml}" class="btn btn-primary btn-sm pull-right">Export XML</a>
-        <a th:href="@{/orders/myorders/import}" class="btn btn-primary btn-sm pull-left">Import</a>
+          <a th:href="@{/orders/myorders/export.yaml}" class="btn btn-primary btn-sm pull-right margin-left">Export YAML</a>
+            <a th:href="@{/orders/myorders/export.xml}" class="btn btn-primary btn-sm pull-right">Export XML</a>
+            <a th:href="@{/orders/myorders/import}" class="btn btn-primary btn-sm pull-left">Import</a>
 
-    </div>
+        </div>
+      </div>
   </div>
 
 
 
     <!--/*/ <th:block th:include="fragments/ordersTable :: ordersTable"></th:block> /*/-->
+
+</div>
+<div class="footer-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <p> <a href="#">Expleo</a> © 2023 </p>
+            </div>
+            <div class="col-lg-6 text-end link">
+                <ul>
+                    <li> <a href="#">Terms</a> </li>
+                    <li> <a href="#">Privacy</a> </li>
+                    <li> <a href="#">Support</a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
