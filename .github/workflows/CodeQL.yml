@@ -19,7 +19,7 @@ jobs:
         uses: github/codeql-action/init@v2
 
       - name: Build CodeQL database
-        run: codeql database create . --language=java --source-root=your/package/path
+        run: codeql database create . --language=java --source-root=src/main/
 
       - name: Run CodeQL analysis
         run: codeql analyze --sarif --output=results/codeql-sarif.sarif
