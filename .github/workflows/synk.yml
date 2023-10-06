@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - dev
+      
       - master  # Change to your default branch name if needed
+
 jobs:
   snyk-test:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v2
 
