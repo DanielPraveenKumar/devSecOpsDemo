@@ -32,7 +32,7 @@ public class SearchRepository {
         // set the parameter
         typedQuery.setParameter("input", "%" + lowerInput + "%");
 
-        // return the result
+        // return the result1
         return typedQuery.getResultList();
 
     }
