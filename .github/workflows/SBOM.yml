@@ -6,7 +6,7 @@ on:
       - master  # Change to your default branch name if needed
 
 jobs:
-  snyk-test:
+  SBom-Details:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
