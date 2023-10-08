@@ -25,6 +25,7 @@ public class SearchRepository {
         String query = "SELECT * FROM product  WHERE LOWER(product_name) LIKE '%" + input + "%' OR LOWER(description) LIKE '%" + input + "%'";
         //create a native query from the string query and execute it
         List<Product> products = em.createNativeQuery(query, Product.class).getResultList();
+
         return products;
 
     }
