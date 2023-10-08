@@ -27,7 +27,6 @@ public class SearchRepository {
         List<Product> products = em.createNativeQuery(query, Product.class).getResultList();
 
 
-
         //test
         return products;
 
