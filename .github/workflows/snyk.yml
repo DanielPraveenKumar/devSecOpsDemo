@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: "sbom-${{ github.run_number }}"
-          path: target/bom.xml
+          path: target/CycloneDX-Sbom.json
 
 
 
