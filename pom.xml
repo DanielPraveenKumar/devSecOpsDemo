@@ -98,7 +98,7 @@
     </dependencies>
 
     <build>
-        <finalName>JavaCoffeeShop</finalName>
+        <finalName>JavaCoffeeShop!!!</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
