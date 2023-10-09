@@ -95,4 +95,30 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.run_number }} .
       - name: Publish Docker image
         run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
- 
+
+  Deploy:
+      needs: Docker_push
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v3
+          with:
+            repository: Ragavendira1/javacoffeeshop   # Replace with the repository URL
+            ref: main 
+            token: ${{secrets.PAT_TOKEN }}
+  
+        - name: Modify Manifest
+          run: |
+              # Replace the image and tag in the manifest file
+              sed -i "s|Ragavendira1/aidevsecopsdemo:.*|Ragavendira1/aidevsecopsdemo:${{ github.run_number }}|" ./manifest/deployment.yaml
+  
+       
+        - name: Commit and Push Change
+          run: |
+              git config --global user.name "Ragavendira1"
+              git config --global user.email "rragavendira@gmail.com"
+              git add ./manifest/deployment.yaml
+              git commit -m "Update image tag"
+              git push origin main  
+          env:
+            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
