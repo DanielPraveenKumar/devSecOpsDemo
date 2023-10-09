@@ -107,15 +107,17 @@ jobs:
             ref: main 
             token: ${{secrets.PAT_TOKEN }}
 
-        - name: Debug - Show Git Status After Changes
-          run: git status
-          shell: bash
+
   
         - name: Modify Manifest
           run: |
               # Replace the image and tag in the manifest file
               echo "GitHub Runnumber: ${{ github.run_number }}"
               sed -i "s|Ragavendira1/aidevsecopsdemo:.*|Ragavendira1/aidevsecopsdemo:${{ github.run_number }}|" ./manifest/deployment.yaml
+
+        - name: Debug - Show Git Status After Changes
+          run: git status
+          shell: bash
   
         - name: Commit and Push Change
           run: |
