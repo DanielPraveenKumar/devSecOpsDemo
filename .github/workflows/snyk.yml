@@ -5,6 +5,30 @@ on:
       - dev
       - master  # Change to your default branch name if needed
 jobs:
+  SBom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+
+        with:
+          java-version: 11
+          distribution: 'adopt'  # You can adjust the Java version as needed
+
+      - name: Generate SBOM
+        run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+
+      - name: Upload SBOM report to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "sbom-${{ github.run_number }}"
+          path: target/bom.xml
+
+
+
   build:
     runs-on: ubuntu-latest
 
