@@ -110,9 +110,9 @@ jobs:
         - name: Modify Manifest
           run: |
               # Replace the image and tag in the manifest file
+              echo "GitHub Runnumber: ${{ github.run_number }}"
               sed -i "s|Ragavendira1/aidevsecopsdemo:.*|Ragavendira1/aidevsecopsdemo:${{ github.run_number }}|" ./manifest/deployment.yaml
   
-       
         - name: Commit and Push Change
           run: |
               git config --global user.name "Ragavendira1"
