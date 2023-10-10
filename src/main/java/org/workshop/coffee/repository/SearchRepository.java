@@ -20,7 +20,7 @@ public class SearchRepository {
 
     public List<Product> searchProduct (String input) {
 
-      //Lower case the input
+      //Lower case the input!!
         input = input.toLowerCase(Locale.ROOT);
         //create string query that matches the input to the product_name or description
         String query = "SELECT * FROM product WHERE LOWER(product_name) LIKE '%" + input + "%' OR LOWER(description) LIKE '%" + input + "%'";
