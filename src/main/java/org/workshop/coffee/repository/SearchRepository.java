@@ -1,3 +1,4 @@
+
 package org.workshop.coffee.repository;
 
 import org.workshop.coffee.domain.Product;
@@ -19,19 +20,17 @@ public class SearchRepository {
     DataSource dataSource;
 
     public List<Product> searchProduct (String input) {
-        //lower the input
+        //lowercase the input
         input = input.toLowerCase(Locale.ROOT);
-        // creat a string query  that matches the input with the product_name or description
-        String query = "SELECT p FROM Product p WHERE LOWER(p.productName) LIKE '%" + input + "%' OR LOWER(p.description) LIKE '%" + input + "%'";
-        // execute the native query
-        List<Product> products = em.createQuery(query, Product.class).getResultList();
-        // return the result if product is found else return null
-           if (products.size() > 0) {
-                return products;
-            } else {
-                return null;
-            }
 
+        // create a parametrized string query that matches the input to the product name or description
+        String query = "SELECT p FROM Product p WHERE LOWER(p.productName) LIKE :input OR LOWER(p.description) LIKE :input";
+        // create a list of products that match the query
+        List<Product> products = em.createQuery(query, Product.class)
+                .setParameter("input", "%" + input + "%")
+                .getResultList();
+        //  return the list of products
+        return products;
     }
 
 
