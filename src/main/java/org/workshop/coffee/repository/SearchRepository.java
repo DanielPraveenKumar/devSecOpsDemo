@@ -21,7 +21,14 @@ public class SearchRepository {
 
     public List<Product> searchProduct (String input) {
 
-        return null;
+        //lowercase the input
+        input = input.toLowerCase(Locale.ROOT);
+        //create a string query that matches the input with the product_name or description
+        String query = "SELECT * FROM product WHERE LOWER(product_name) LIKE '%" + input + "%' OR LOWER(description) LIKE '%" + input + "%'";
+        // execute the native query and return the result
+        List<Product> products = em.createNativeQuery(query, Product.class).getResultList();
+        return products;
+
     }
 
 
