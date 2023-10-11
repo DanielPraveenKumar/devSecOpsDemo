@@ -21,14 +21,8 @@ public class SearchRepository {
 
     public List<Product> searchProduct (String input) {
 
-        //lowercase the input
-        input = input.toLowerCase(Locale.ROOT);
-        //create a parametrized string that matches the input with the product_name or description
-        String query = "SELECT p FROM Product p WHERE LOWER(p.productName) LIKE CONCAT('%',:input,'%') OR LOWER(p.description) LIKE CONCAT('%',:input,'%')";
-        //create a list of products that match the query
-        List<Product> products = em.createQuery(query, Product.class).setParameter("input", input).getResultList();
-        //return the list of products
-        return products;
+
+        return null;
 
     }
 
