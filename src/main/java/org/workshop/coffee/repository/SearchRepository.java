@@ -1,3 +1,4 @@
+
 package org.workshop.coffee.repository;
 
 import org.workshop.coffee.domain.Product;
@@ -20,20 +21,14 @@ public class SearchRepository {
 
     public List<Product> searchProduct (String input) {
 
-
-
-
         //lowercase the input
-        var lowerInput  = input.toLowerCase(Locale.ROOT);
-        // create a string query parameterized that matches the input to the product name or description
-        var query = "SELECT p FROM Product p WHERE lower(p.name) LIKE :input OR lower(p.description) LIKE :input";
-        // create a query from the string
-        var typedQuery = em.createQuery(query, Product.class);
-        // set the parameter
-        typedQuery.setParameter("input", "%" + lowerInput + "%");
-
-        // return the result1
-        return typedQuery.getResultList();
+        input = input.toLowerCase(Locale.ROOT);
+        //create a parametrized string that matches the input with the product_name or description
+        String query = "SELECT p FROM Product p WHERE LOWER(p.productName) LIKE CONCAT('%',:input,'%') OR LOWER(p.description) LIKE CONCAT('%',:input,'%')";
+        //create a list of products that match the query
+        List<Product> products = em.createQuery(query, Product.class).setParameter("input", input).getResultList();
+        //return the list of products
+        return products;
 
     }
 
