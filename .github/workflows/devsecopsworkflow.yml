@@ -113,7 +113,7 @@ jobs:
           run: |
               # Replace the image and tag in the manifest file
               echo "GitHub Runnumber: ${{ github.run_number }}"
-              sed -i "s|xplatformexpleo/devsecops:.*|xplatformexpleo/devsecops:${{ github.run_number }}|" ./manifest/deployment.yaml
+              sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./manifest/deployment.yaml
         
         - name: Debug - Show Git Status After Changes
           run: git status
@@ -121,8 +121,8 @@ jobs:
   
         - name: Commit and Push Change
           run: |
-              git config --global user.name "Ragavendira1"
-              git config --global user.email "rragavendira@gmail.com"
+              git config --global user.name "DanielPraveenKumar"
+              git config --global user.email "danielpraveenkumar.k@gmail.com"
               git add ./manifest/deployment.yaml
               git commit -m "Update image tag"
               git push origin main  
