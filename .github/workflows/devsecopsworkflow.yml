@@ -103,7 +103,7 @@ jobs:
         - name: Checkout Repository
           uses: actions/checkout@v3
           with:
-            repository: Ragavendira1/javacoffeeshop   # Replace with the repository URL
+            repository: danielpraveenkumar/aidevsecops   # Replace with the repository URL
             ref: main 
             token: ${{secrets.PAT_TOKEN }}
 
