@@ -20,6 +20,7 @@ jobs:
             GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
       continue-on-error: true
   Build_and_test:
+    needs: GGShield
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -32,6 +33,7 @@ jobs:
     # - name: Build Test Maven
     #   run: mvn -B package --file pom.xml -DskipTests  
   Snyk: 
+      needs: Build_and_test
       runs-on: ubuntu-latest
       steps:
       - name: Checkout
@@ -61,6 +63,7 @@ jobs:
             exit 1
           fi
   Sbom:
+    needs: Snyk
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
