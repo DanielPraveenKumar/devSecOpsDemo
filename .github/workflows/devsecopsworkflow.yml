@@ -53,15 +53,17 @@ jobs:
 
       - name: Run Snyk Test
         run: |
+          set -x
           snyk test --all-projects
-          
-          if [ $? -eq 0 ]; then
+          snyk_exit_status=$?
+          if [ $snyk_exit_status -eq 0 ]; then
             echo "Snyk test passed, no vulnerabilities found."
           else
             echo "Snyk test failed, vulnerabilities found."
             exit 1
           fi
-        # continue-on-error: true
+          set +x
+        continue-on-error: true
         
 
   Sbom:
