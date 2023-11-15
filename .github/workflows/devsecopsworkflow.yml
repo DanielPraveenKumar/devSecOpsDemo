@@ -2,8 +2,8 @@ name: DevSecOps Pipeline Demo
 on:
   push:
     branches:
-      - dev
-      - master  # Change to your default branch name if needed
+      - feature
+      # Change to your default branch name if needed
 jobs:
   GGShield:
     runs-on: ubuntu-latest
