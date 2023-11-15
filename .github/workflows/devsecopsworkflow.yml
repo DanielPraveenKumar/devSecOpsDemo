@@ -53,8 +53,13 @@ jobs:
 
       - name: Run Snyk Test
         run: |
-          set -x
           snyk test --all-projects
+          echo $?      
+        continue-on-error: true
+        
+      - name: snyk status
+        run: |
+          echo $?
           snyk_exit_status=$?
           if [ $snyk_exit_status -eq 0 ]; then
             echo "Snyk test passed, no vulnerabilities found."
@@ -62,10 +67,6 @@ jobs:
             echo "Snyk test failed, vulnerabilities found."
             exit 1
           fi
-          set +x
-        continue-on-error: true
-        
-
   Sbom:
     needs: Snyk
     runs-on: ubuntu-latest
