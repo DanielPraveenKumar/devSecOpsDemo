@@ -33,7 +33,7 @@ jobs:
       with:
         name: coffeshopartifact
         path: ./target/*.jar
-  
+   
   Snyk: 
       needs: Build_and_test
       runs-on: ubuntu-latest
