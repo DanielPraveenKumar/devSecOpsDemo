@@ -49,7 +49,7 @@ jobs:
         run: npm install -g snyk@1.1237.0 
 
       - name: Authenticate Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+        run: snyk auth ${{ secrets.SNYK_KEY }}
 
       - name: Run Snyk Test
         run: snyk test --all-projects
