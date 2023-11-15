@@ -54,13 +54,14 @@ jobs:
       - name: Run Snyk Test
         run: |
           snyk test --all-projects
+          
           if [ $? -eq 0 ]; then
             echo "Snyk test passed, no vulnerabilities found."
           else
             echo "Snyk test failed, vulnerabilities found."
             exit 1
           fi
-        continue-on-error: true
+        # continue-on-error: true
         
 
   Sbom:
