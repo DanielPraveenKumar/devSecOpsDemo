@@ -33,17 +33,19 @@ jobs:
   
     - name: find xml path
       run : |
-         ls target/site
+         echo "present folders"
+         ls
+         find -name jacoco
       
-    - uses: actions/upload-artifact@v3
-      with:
-        name: coffeshopartifact
-        path: ./target/*.jar
-    - name: Upload JaCoCo coverage report
-      uses: actions/upload-artifact@v2
-      with:
-         name: jacoco-report
-         path: target/site/jacoco/jacoco.xml
+    # - uses: actions/upload-artifact@v3
+    #   with:
+    #     name: coffeshopartifact
+    #     path: ./target/*.jar
+    # - name: Upload JaCoCo coverage report
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #      name: jacoco-report
+    #      path: target/site/jacoco/jacoco.xml
   # Snyk: 
   #     needs: Build_and_test
   #     runs-on: ubuntu-latest
