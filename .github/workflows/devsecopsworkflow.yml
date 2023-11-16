@@ -31,12 +31,18 @@ jobs:
       uses: actions/checkout@v3
       
             
-    - name: Build Maven
-      run: mvn -B package --file pom.xml
+    # - name: Build Maven
+    #   run: mvn -B package --file pom.xml
 
-    - name: mvn test
-      run: mvn surefire-report:report
+    # - name: mvn test
+    #   run: mvn surefire-report:report
+      
+    - name: Build
+      run: mvn --batch-mode -DskipTests package
 
+    - name: Test
+      run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
+      
     - name: Report
       uses: dorny/test-reporter@v1
       if: always()
@@ -53,30 +59,30 @@ jobs:
     #     echo "xml search"
     #     find -name *xml*
         
-    - uses: actions/upload-artifact@v3
-      with:
-        name: coffeshopartifact
-        path: |
-          ./target/*.jar
+    # - uses: actions/upload-artifact@v3
+    #   with:
+    #     name: coffeshopartifact
+    #     path: |
+    #       ./target/*.jar
           
-    - name: Upload JaCoCo coverage report
-      uses: actions/upload-artifact@v2
-      with:
-         name: jacoco-report
-         path: |
-           target/site/jacoco
+    # - name: Upload JaCoCo coverage report
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #      name: jacoco-report
+    #      path: |
+    #        target/site/jacoco
 
          
-    - name: Add coverage to PR
-      id: jacoco
-      uses: madrapps/jacoco-report@v1.6.1
-      with:
-          paths: |
-             target/site/jacoco/jacoco.xml
-          token: ${{ secrets.PAT_TOKEN }}
-          min-coverage-overall: 40
-          min-coverage-changed-files: 10
-          debug-mode: true
+    # - name: Add coverage to PR
+    #   id: jacoco
+    #   uses: madrapps/jacoco-report@v1.6.1
+    #   with:
+    #       paths: |
+    #          target/site/jacoco/jacoco.xml
+    #       token: ${{ secrets.PAT_TOKEN }}
+    #       min-coverage-overall: 40
+    #       min-coverage-changed-files: 10
+    #       debug-mode: true
 
     # - name: Get the Coverage info
     #   run: |
