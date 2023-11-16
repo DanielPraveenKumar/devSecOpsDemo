@@ -1,4 +1,3 @@
-
 package org.workshop.coffee.repository;
 
 import org.junit.jupiter.api.Test;
