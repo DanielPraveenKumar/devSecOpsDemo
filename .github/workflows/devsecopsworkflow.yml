@@ -69,7 +69,7 @@ jobs:
             exit 1
           fi
   Sbom:
-    needs: Build_and_test
+    needs: Snyk
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -121,7 +121,7 @@ jobs:
           command: monitor
 
   Docker_push:
-      needs: [Build_and_test]
+      needs: [opensource-monitor]
       runs-on: ubuntu-latest
   
       steps:
