@@ -52,7 +52,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
          name: jacoco-report
-         path: target/site/jacoco/jacoco.xml
+         path: target/site/jacoco
     - name: Add coverage to PR
       id: jacoco
       uses: madrapps/jacoco-report@v1.6.1
