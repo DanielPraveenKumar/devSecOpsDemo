@@ -11,15 +11,15 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Git_guardian
-      uses: GitGuardian/ggshield-action@v1.20.0
-      env:
-            GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-            GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-            GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-            GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-            GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
-      continue-on-error: true
+    # - name: Git_guardian
+    #   uses: GitGuardian/ggshield-action@v1.20.0
+    #   env:
+    #         GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+    #         GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+    #         GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    #         GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    #         GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+    #   continue-on-error: true
       
   Build_and_test:
     needs: GGShield
@@ -32,23 +32,23 @@ jobs:
     - name: Build Maven
       run: mvn -B package --file pom.xml
   
-    - name: find xml path
-      run : |
-         echo "present folders"
-         ls target
-         echo "find jacoco"
-         find -name *.xml
-         find -name *jacoco*
+    # - name: find xml path
+    #   run : |
+    #      echo "present folders"
+    #      ls target
+    #      echo "find jacoco"
+    #      find -name *.xml
+    #      find -name *jacoco*
       
-    # - uses: actions/upload-artifact@v3
-    #   with:
-    #     name: coffeshopartifact
-    #     path: ./target/*.jar
-    # - name: Upload JaCoCo coverage report
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #      name: jacoco-report
-    #      path: target/site/jacoco/jacoco.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: coffeshopartifact
+        path: ./target/*.jar
+    - name: Upload JaCoCo coverage report
+      uses: actions/upload-artifact@v2
+      with:
+         name: jacoco-report
+         path: target/site/jacoco/jacoco.xml
   # Snyk: 
   #     needs: Build_and_test
   #     runs-on: ubuntu-latest
