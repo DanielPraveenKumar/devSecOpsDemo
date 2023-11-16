@@ -41,7 +41,7 @@ jobs:
         ls
         ls target
         echo "xml search"
-        find -name *.xml
+        find -name *xml*
         
     - uses: actions/upload-artifact@v3
       with:
