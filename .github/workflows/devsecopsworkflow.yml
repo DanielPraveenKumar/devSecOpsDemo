@@ -42,6 +42,9 @@ jobs:
 
     - name: Test
       run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
+
+    - name: coverage report
+      run: python3 -m pytest --cov-report "xml:reports/coverage/coverage.xml"
       
     - name: Report
       uses: dorny/test-reporter@v1
