@@ -33,21 +33,30 @@ jobs:
             
     - name: Build Maven
       run: mvn -B package --file pom.xml
-    
+
+    - name: mvn test
+      run: mvn surefire-report:report
     - name: check xml
       run: |
+        ls
+        ls target
+        echo "xml search"
         find -name *.xml
         
     - uses: actions/upload-artifact@v3
       with:
         name: coffeshopartifact
-        path: ./target/*.jar
-        
+        path: |
+          ./target/*.jar
+          ./target/surefire-reports/TEST-*.xml
+          
     - name: Upload JaCoCo coverage report
       uses: actions/upload-artifact@v2
       with:
          name: jacoco-report
-         path: target/site/jacoco
+         path: |
+           target/site/jacoco
+           target/surefire-reports/TEST-*.xml
          
     - name: Add coverage to PR
       id: jacoco
