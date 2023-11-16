@@ -29,12 +29,17 @@ jobs:
       
             
     - name: Build Maven
-      run: mvn -B package --file pom.xml -DskipTests 
+      run: mvn -B package --file pom.xml
+      
     - uses: actions/upload-artifact@v3
       with:
         name: coffeshopartifact
         path: ./target/*.jar
-   
+    - name: Upload JaCoCo coverage report
+      uses: actions/upload-artifact@v2
+      with:
+         name: jacoco-report
+         path: target/site/jacaco/jacaco.xml
   Snyk: 
       needs: Build_and_test
       runs-on: ubuntu-latest
