@@ -33,8 +33,11 @@ jobs:
             
     - name: Build Maven
       run: mvn -B package --file pom.xml
-  
-      
+    
+    - name: check xml
+      run: |
+        find -name *.xml
+        
     - uses: actions/upload-artifact@v3
       with:
         name: coffeshopartifact
