@@ -1,11 +1,27 @@
 name: DevSecOps Pipeline Demo
 on:
-  push:
+  workflow_dispatch:
+  push: 
     branches:
       - dev
-      - master  # Change to your default branch name if needed
-jobs:  
+      # Change to your default branch name if needed
+jobs:
+  GGShield:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Git_guardian
+      uses: GitGuardian/ggshield-action@v1.20.0
+      env:
+            GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+            GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+            GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+            GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+            GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+      continue-on-error: true
   Build_and_test:
+    needs: GGShield
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -13,15 +29,51 @@ jobs:
       
             
     - name: Build Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -DskipTests 
+    - uses: actions/upload-artifact@v3
+      with:
+        name: coffeshopartifact
+        path: ./target/*.jar
+   
+  Snyk: 
+      needs: Build_and_test
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Unit Test
-      run: mvn clean compile test
-      
-    - name: Build Test Maven
-      run: mvn -B package --file pom.xml -DskipTests  
-    
+      - name: Use Node.js 
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.x
+      - name: Install Snyk CLI
+        run: npm install -g snyk@1.1237.0 
 
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_KEY }}
+
+      - name: Run Snyk Test
+        run: |
+          snyk test --all-projects
+          echo $?      
+        continue-on-error: true
+        
+      - name: snyk status
+        run: |
+          echo $?
+          snyk_exit_status=$?
+          if [ $snyk_exit_status -eq 0 ]; then
+            echo "Snyk test passed, no vulnerabilities found."
+          else
+            echo "Snyk test failed, vulnerabilities found."
+            exit 1
+          fi
+  Sbom:
+    needs: Snyk
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Generate SBOM
       run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
 
@@ -33,7 +85,7 @@ jobs:
 
    
   opensource-security:
-    needs: [ Build_and_test ]
+    needs: [ Sbom ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -75,6 +127,10 @@ jobs:
       steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+            name: coffeshopartifact
+            path: ./
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -84,7 +140,7 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.run_number }} .
       - name: Publish Docker image
         run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
-
+ 
   Deploy:
       needs: Docker_push
       runs-on: ubuntu-latest
@@ -92,7 +148,7 @@ jobs:
         - name: Checkout Repository
           uses: actions/checkout@v3
           with:
-            repository: danielpraveenkumar/aidevsecops   # Replace with the repository URL
+            repository: danielpraveenkumar/Deployment   # Replace with the repository URL
             ref: main 
             token: ${{secrets.PAT_TOKEN }}
 
