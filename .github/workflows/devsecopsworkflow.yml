@@ -36,12 +36,18 @@ jobs:
 
     - name: mvn test
       run: mvn surefire-report:report
-    - name: check xml
+      
+    - name: Run Tests and Generate Coverage
       run: |
-        ls
-        ls target
-        echo "xml search"
-        find -name *xml*
+        mvn clean test jacoco:report
+      continue-on-error: true
+      
+    # - name: check xml
+    #   run: |
+    #     ls
+    #     ls target
+    #     echo "xml search"
+    #     find -name *xml*
         
     - uses: actions/upload-artifact@v3
       with:
@@ -54,7 +60,7 @@ jobs:
       with:
          name: jacoco-report
          path: |
-           target/site/jacoco/jacoco.xml
+           target/site/jacoco
 
          
     - name: Add coverage to PR
