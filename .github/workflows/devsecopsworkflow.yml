@@ -4,7 +4,11 @@ on:
   push: 
     branches:
       - dev
-      # Change to your default branch name if needed
+permissions:
+    checks: write
+    security-events: write
+    packages: write
+    actions: write
 jobs:
   GGShield:
     runs-on: ubuntu-latest
@@ -49,6 +53,13 @@ jobs:
       with:
          name: jacoco-report
          path: target/site/jacoco/jacoco.xml
+    - name: Add coverage to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+          paths: |
+             target/site/jacoco/jacoco.xml
+          token: ${{ secrets.PAT_TOKEN }}
   # Snyk: 
   #     needs: Build_and_test
   #     runs-on: ubuntu-latest
