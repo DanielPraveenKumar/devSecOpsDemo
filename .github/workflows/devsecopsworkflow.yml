@@ -34,8 +34,9 @@ jobs:
     - name: find xml path
       run : |
          echo "present folders"
-         ls
-         find -name jacoco
+         ls target
+         echo "find jacoco"
+         find -name *jacoco*
       
     # - uses: actions/upload-artifact@v3
     #   with:
