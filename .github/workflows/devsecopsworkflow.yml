@@ -55,7 +55,7 @@ jobs:
       with:
          name: jacoco-report
          path: |
-           target/site/jacoco
+           target/site/jacoco/jacoco.xml
            target/surefire-reports/TEST-*.xml
          reporter: jest-junit
      
@@ -66,6 +66,7 @@ jobs:
       with:
           paths: |
              target/surefire-reports/TEST-*.xml
+             target/site/jacoco/jacoco.xml
           token: ${{ secrets.PAT_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 10
