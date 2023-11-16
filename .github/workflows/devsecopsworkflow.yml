@@ -15,6 +15,9 @@ jobs:
     - name: Build Maven
       run: mvn -B package --file pom.xml
 
+    - name: Unit Test
+      run: mvn clean compile test
+      
     - name: Build Test Maven
       run: mvn -B package --file pom.xml -DskipTests  
     
