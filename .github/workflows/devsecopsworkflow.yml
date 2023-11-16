@@ -57,6 +57,8 @@ jobs:
          path: |
            target/site/jacoco
            target/surefire-reports/TEST-*.xml
+         reporter: jest-junit
+     
          
     - name: Add coverage to PR
       id: jacoco
