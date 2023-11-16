@@ -44,7 +44,7 @@ jobs:
       run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
 
     - name: coverage report
-      run: python3 -m pytest --cov-report "xml:reports/coverage/coverage.xml"
+      run: mvn jacoco:prepare-agent test jacoco:report
       
     - name: Report
       uses: dorny/test-reporter@v1
@@ -59,13 +59,13 @@ jobs:
       with:
         token: ${{secrets.PAT_TOKEN }}   
         junit-path: target/surefire-reports/*.xml  
-        coverage-path: ./reports/coverage/coverage.xml   
-    # - name: check xml
-    #   run: |
-    #     ls
-    #     ls target
-    #     echo "xml search"
-    #     find -name *xml*
+        coverage-path: target/site/jacoco/index.html   
+    - name: check xml
+      run: |
+        ls
+        ls target
+        echo "html search"
+        
         
     # - uses: actions/upload-artifact@v3
     #   with:
