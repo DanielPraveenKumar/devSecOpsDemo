@@ -58,7 +58,7 @@ jobs:
       uses: madrapps/jacoco-report@v1.6.1
       with:
           paths: |
-             target/site/jacoco/jacoco.xml
+             target/site/jacoco/jacoco-sessions.html
           token: ${{ secrets.PAT_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 60
