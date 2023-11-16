@@ -36,12 +36,16 @@ jobs:
 
     - name: mvn test
       run: mvn surefire-report:report
-      
-    - name: Run Tests and Generate Coverage
-      run: |
-        mvn clean test jacoco:report
-      continue-on-error: true
-      
+
+    - name: Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Maven Tests
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
+        fail-on-error: true
+        
     # - name: check xml
     #   run: |
     #     ls
