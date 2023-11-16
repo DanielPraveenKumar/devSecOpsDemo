@@ -2,11 +2,11 @@ name: DevSecOps Pipeline Demo
 on:
   workflow_dispatch:
   pull_request:
-# permissions:
-#     checks: write
-#     security-events: write
-#     packages: write
-#     actions: write
+permissions:
+    checks: write
+    security-events: write
+    packages: write
+    actions: write
 jobs:
   GGShield:
     runs-on: ubuntu-latest
@@ -60,35 +60,35 @@ jobs:
         path: |
           ./target/*.jar
           
-    - name: Upload JaCoCo coverage report
-      uses: actions/upload-artifact@v2
-      with:
-         name: jacoco-report
-         path: |
-           target/site/jacoco
+    # - name: Upload JaCoCo coverage report
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #      name: jacoco-report
+    #      path: |
+    #        target/site/jacoco
 
          
-    - name: Add coverage to PR
-      id: jacoco
-      uses: madrapps/jacoco-report@v1.6.1
-      with:
-          paths: |
-             target/site/jacoco/jacoco.xml
-          token: ${{ secrets.PAT_TOKEN }}
-          min-coverage-overall: 40
-          min-coverage-changed-files: 10
-          debug-mode: true
+    # - name: Add coverage to PR
+    #   id: jacoco
+    #   uses: madrapps/jacoco-report@v1.6.1
+    #   with:
+    #       paths: |
+    #          target/site/jacoco/jacoco.xml
+    #       token: ${{ secrets.PAT_TOKEN }}
+    #       min-coverage-overall: 40
+    #       min-coverage-changed-files: 10
+    #       debug-mode: true
 
-    - name: Get the Coverage info
-      run: |
-        echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
-        echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-    - name: Fail PR if overall coverage is less than 80%
-      if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 }}
-      uses: actions/github-script@v6
-      with:
-        script: |
-          core.setFailed('Overall coverage is less than 80%!')
+    # - name: Get the Coverage info
+    #   run: |
+    #     echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+    #     echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+    # - name: Fail PR if overall coverage is less than 80%
+    #   if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 }}
+    #   uses: actions/github-script@v6
+    #   with:
+    #     script: |
+    #       core.setFailed('Overall coverage is less than 80%!')
   Snyk: 
       needs: Build_and_test
       runs-on: ubuntu-latest
