@@ -51,7 +51,12 @@ jobs:
         path: target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
-        
+    - name: Custom Reports
+      uses: xportation/junit-coverage-report@main
+      with:
+        token: ${{secrets.PAT_TOKEN }}   
+        junit-path: target/surefire-reports/*.xml  
+        coverage-path: ./reports/coverage/coverage.xml   
     # - name: check xml
     #   run: |
     #     ls
