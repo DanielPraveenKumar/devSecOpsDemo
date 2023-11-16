@@ -44,7 +44,7 @@ jobs:
       run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
 
     - name: coverage report
-      run: mvn jacoco:prepare-agent test jacoco:report
+      run: mvn clean verify
       
     - name: Report
       uses: dorny/test-reporter@v1
@@ -57,7 +57,7 @@ jobs:
     - name: Custom Reports
       uses: xportation/junit-coverage-report@main
       with:
-        token: ${{secrets.PAT_TOKEN }}   
+        github-token: ${{secrets.PAT_TOKEN }}   
         junit-path: target/surefire-reports/*.xml  
         coverage-path: target/site/jacoco/index.html   
     - name: check xml
