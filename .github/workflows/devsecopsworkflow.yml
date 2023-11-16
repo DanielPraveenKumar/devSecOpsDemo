@@ -34,29 +34,24 @@ jobs:
     - name: Build Maven
       run: mvn -B package --file pom.xml
   
-    # - name: find xml path
-    #   run : |
-    #      echo "present folders"
-    #      ls target
-    #      echo "find jacoco"
-    #      find -name *.xml
-    #      find -name *jacoco*
       
     - uses: actions/upload-artifact@v3
       with:
         name: coffeshopartifact
         path: ./target/*.jar
+        
     - name: Upload JaCoCo coverage report
       uses: actions/upload-artifact@v2
       with:
          name: jacoco-report
          path: target/site/jacoco
+         
     - name: Add coverage to PR
       id: jacoco
       uses: madrapps/jacoco-report@v1.6.1
       with:
           paths: |
-             target/site/jacoco/jacoco-sessions.html
+             target/site/jacoco/jacoco.xml
           token: ${{ secrets.PAT_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 10
