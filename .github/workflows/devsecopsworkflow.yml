@@ -4,7 +4,7 @@ on:
     branches:
       - dev
       - master  # Change to your default branch name if needed
-jobs:
+jobs:  
   Build_and_test:
     runs-on: ubuntu-latest
     steps:
