@@ -5,7 +5,9 @@ on:
     # branches:
     #   - dev
 permissions:
-    checks: write
+    checks: |
+      read,
+      write
     security-events: write
     packages: write
     actions: write
@@ -68,7 +70,7 @@ jobs:
       with:
          name: jacoco-report
          path: |
-           target/site/jacoco
+           target/site/jacoco,
            target/surefire-reports
 
     - name: Publish test coverage results
