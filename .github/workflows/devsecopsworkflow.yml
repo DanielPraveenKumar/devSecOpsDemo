@@ -67,6 +67,7 @@ jobs:
          name: jacoco-report
          path: |
            target/site/jacoco
+           target/surefire-reports
 
          
     - name: Add coverage to PR
