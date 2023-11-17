@@ -16,8 +16,8 @@ import org.junit.runner.RunWith;
 
 @SpringBootTest
 public class SearchRepositoryTest {
+    
     private final SearchRepository searchRepository;
-
     @Autowired
     public SearchRepositoryTest(SearchRepository searchRepository) {
         this.searchRepository = searchRepository;
