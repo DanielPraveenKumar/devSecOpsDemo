@@ -69,14 +69,20 @@ jobs:
            target/site/jacoco
            target/surefire-reports
 
-         
-    - name: Add coverage to PR
-      id: jacoco
-      uses: madrapps/jacoco-report@v1.6.1
+    - name: Publish test coverage results
+      uses: PavanMudigonda/jacoco-reporter@v4.8
       with:
-          paths: |
-             target/site/jacoco/jacoco.xml
-          token: ${{ secrets.PAT_TOKEN }}
+          coverage_results_path: 'target/site/jacoco/jacoco.xml'
+          coverage_report_title: 'Test coverage results'
+          coverage_report_name: 'Test coverage results'
+          github_token: ${{ secrets.PAT_TOKEN }} 
+    # - name: Add coverage to PR
+    #   id: jacoco
+    #   uses: madrapps/jacoco-report@v1.6.1
+    #   with:
+    #       paths: |
+    #          target/site/jacoco/jacoco.xml
+    #       token: ${{ secrets.PAT_TOKEN }}
           # min-coverage-overall: 40
           # min-coverage-changed-files: 10
           # debug-mode: true
