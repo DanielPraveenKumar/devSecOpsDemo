@@ -76,7 +76,7 @@ jobs:
           coverage_results_path: 'target/site/jacoco/jacoco.xml'
           coverage_report_title: 'Test coverage results'
           coverage_report_name: 'Test coverage results'
-          skip_check_run: false
+          skip_check_run: true
           minimum_coverage: 80
           fail_below_threshold: false
           publish_only_summary: false
