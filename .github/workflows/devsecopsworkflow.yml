@@ -44,8 +44,8 @@ jobs:
     # - name: Build
     #   run: mvn --batch-mode -DskipTests package
 
-    # - name: Test
-    #   run: mvn --batch-mode -Dmaventest.failure.ignore=true test.
+    - name: Test
+      run: mvn --batch-mode -Dmaventest.failure.ignore=true test
 
     - name: Report
       uses: dorny/test-reporter@v1
@@ -82,6 +82,7 @@ jobs:
           fail_below_threshold: false
           publish_only_summary: false
           github_token: ${{ secrets.PAT_TOKEN }} 
+          
     # - name: Add coverage to PR
     #   id: jacoco
     #   uses: madrapps/jacoco-report@v1.6.1
@@ -89,9 +90,9 @@ jobs:
     #       paths: |
     #          target/site/jacoco/jacoco.xml
     #       token: ${{ secrets.PAT_TOKEN }}
-          # min-coverage-overall: 40
-          # min-coverage-changed-files: 10
-          # debug-mode: true
+    #       min-coverage-overall: 40
+    #       min-coverage-changed-files: 10
+    #       debug-mode: true
 
     # - name: Get the Coverage info
     #   run: |
