@@ -9,6 +9,7 @@ permissions:
     security-events: write
     packages: write
     actions: write
+    id-token: write
 jobs:
   GGShield:
     runs-on: ubuntu-latest
