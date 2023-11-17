@@ -53,10 +53,6 @@ jobs:
         reporter: java-junit
         fail-on-error: true
         
-    - name: test report on pull request
-      uses: fjlopezs/lcov-reporter-action@v1.0.0
-      with:
-        lcov-file: target/site/jacoco/jacoco-session.html
         
     - uses: actions/upload-artifact@v3
       with:
