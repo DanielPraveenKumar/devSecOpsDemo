@@ -1,7 +1,9 @@
 name: DevSecOps Pipeline Demo
 on:
   workflow_dispatch:
-  # pull_request:
+  pull_request:
+    branches:
+      - dev
 permissions:
     checks: write
     security-events: write
@@ -32,17 +34,15 @@ jobs:
       uses: actions/checkout@v3
       
             
-    # - name: Build Maven
-    #   run: mvn -B package --file pom.xml
+    - name: Build Maven
+      run: mvn --batch-mode package --file pom.xml
 
-    # - name: mvn test
-    #   run: mvn surefire-report:report
       
-    - name: Build
-      run: mvn --batch-mode -DskipTests package
+    # - name: Build
+    #   run: mvn --batch-mode -DskipTests package
 
-    - name: Test
-      run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
+    # - name: Test
+    #   run: mvn --batch-mode -Dmaventest.failure.ignore=true test.
 
     - name: Report
       uses: dorny/test-reporter@v1
@@ -60,24 +60,24 @@ jobs:
         path: |
           ./target/*.jar
           
-    # - name: Upload JaCoCo coverage report
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #      name: jacoco-report
-    #      path: |
-    #        target/site/jacoco
+    - name: Upload JaCoCo coverage report
+      uses: actions/upload-artifact@v2
+      with:
+         name: jacoco-report
+         path: |
+           target/site/jacoco
 
          
-    # - name: Add coverage to PR
-    #   id: jacoco
-    #   uses: madrapps/jacoco-report@v1.6.1
-    #   with:
-    #       paths: |
-    #          target/site/jacoco/jacoco.xml
-    #       token: ${{ secrets.PAT_TOKEN }}
-    #       min-coverage-overall: 40
-    #       min-coverage-changed-files: 10
-    #       debug-mode: true
+    - name: Add coverage to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+          paths: |
+             target/site/jacoco/jacoco.xml
+          token: ${{ secrets.PAT_TOKEN }}
+          # min-coverage-overall: 40
+          # min-coverage-changed-files: 10
+          # debug-mode: true
 
     # - name: Get the Coverage info
     #   run: |
