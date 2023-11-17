@@ -11,6 +11,7 @@ permissions:
     actions: write
     id-token: write
     pull-requests: write
+    repository-projects: write
 jobs:
   GGShield:
     runs-on: ubuntu-latest
