@@ -5,9 +5,7 @@ on:
     # branches:
     #   - dev
 permissions:
-    checks: |
-      read,
-      write
+    checks: read
     security-events: write
     packages: write
     actions: write
