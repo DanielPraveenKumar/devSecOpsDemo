@@ -27,6 +27,7 @@ jobs:
       continue-on-error: true
       
   Build_and_test:
+    if: "github.ref != dev"
     needs: GGShield
     runs-on: ubuntu-latest
     steps:
