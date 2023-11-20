@@ -9,29 +9,48 @@ permissions:
     security-events: write
     packages: write
     actions: write
-    id-token: write
     pull-requests: write
-    repository-projects: write
 jobs:
-  GGShield:
+  pre_push_hook:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-   
-    - name: Git_guardian
-      uses: GitGuardian/ggshield-action@v1.20.0
-      env:
-            GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-            GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-            GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-            GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-            GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+ 
+    - name: Install Talisman
+      run: |
+          wget https://github.com/thoughtworks/talisman/releases/latest/download/talisman_linux_amd64 -O talisman
+          chmod +x talisman
+          sudo mv talisman /usr/local/bin/
+ 
+    - name: Run Talisman Check
+      run: talisman --scan 
       continue-on-error: true
+ 
+    - name: Upload Report
+      uses: actions/upload-artifact@v3
+      with:
+          name: "talisman-scan-report-${{ github.run_number }}"
+          path: talisman_report/talisman_reports/data
+          
+  # GGShield:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
+   
+  #   - name: Git_guardian
+  #     uses: GitGuardian/ggshield-action@v1.20.0
+  #     env:
+  #           GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+  #           GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+  #           GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+  #           GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+  #           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+  #     continue-on-error: true
       
   Build_and_test:
-    # if: "github.ref != dev"
-    needs: GGShield
+    needs: pre_push_hook
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -105,147 +124,147 @@ jobs:
     #   with:
     #     script: |
     #       core.setFailed('Overall coverage is less than 80%!')
-  # Snyk: 
-  #     needs: Build_and_test
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  Snyk: 
+      needs: Build_and_test
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Use Node.js 
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 11.x
+      - name: Use Node.js 
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.x
    
-  #     - name: Install Snyk CLI
-  #       run: npm install -g snyk@1.1237.0 
+      - name: Install Snyk CLI
+        run: npm install -g snyk@1.1237.0 
 
-  #     - name: Authenticate Snyk
-  #       run: snyk auth ${{ secrets.SNYK_KEY }}
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_KEY }}
 
-  #     - name: Run Snyk Test
-  #       run: |
-  #         snyk test --all-projects
-  #         echo $?      
-  #       continue-on-error: true
+      - name: Run Snyk Test
+        run: |
+          snyk test --all-projects
+          echo $?      
+        continue-on-error: true
         
-  #     - name: snyk status
-  #       run: |
-  #         echo $?
-  #         snyk_exit_status=$?
-  #         if [ $snyk_exit_status -eq 0 ]; then
-  #           echo "Snyk test passed, no vulnerabilities found."
-  #         else
-  #           echo "Snyk test failed, vulnerabilities found."
-  #           exit 1
-  #         fi
+      - name: snyk status
+        run: |
+          echo $?
+          snyk_exit_status=$?
+          if [ $snyk_exit_status -eq 0 ]; then
+            echo "Snyk test passed, no vulnerabilities found."
+          else
+            echo "Snyk test failed, vulnerabilities found."
+            exit 1
+          fi
  
-  # Sbom:
-  #   needs: Snyk
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v3
+  Sbom:
+    needs: Snyk
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
    
-  #   - name: Generate SBOM
-  #     run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+    - name: Generate SBOM
+      run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
 
-  #   - name: Upload SBOM report to artifact
-  #     uses: actions/upload-artifact@v3
-  #     with:
-  #         name: "sbom-${{ github.run_number }}"
-  #         path: target/CycloneDX-Sbom.json
+    - name: Upload SBOM report to artifact
+      uses: actions/upload-artifact@v3
+      with:
+          name: "sbom-${{ github.run_number }}"
+          path: target/CycloneDX-Sbom.json
 
    
-  # opensource-security:
-  #   needs: [ Sbom ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@master
-  #     - name: Run Snyk to check for vulnerabilities
-  #       uses: snyk/actions/maven@master
-  #       continue-on-error: true
-  #       env:
-  #         SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
+  opensource-security:
+    needs: [ Sbom ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
 
-  # code-security:
-  #   needs: [ opensource-security ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@master
-  #     - name: Run Snyk to check for vulnerabilities
-  #       uses: snyk/actions/maven@master
-  #       continue-on-error: true
-  #       env:
-  #         SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
-  #       with:
-  #         command: code test
+  code-security:
+    needs: [ opensource-security ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
+        with:
+          command: code test
 
-  # opensource-monitor:
-  #   needs: [ opensource-security, code-security ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@master
-  #     - name: Run Snyk to check for vulnerabilities
-  #       uses: snyk/actions/maven@master
-  #       env:
-  #         SNYK_TOKEN: ${{ secrets.SNYK_KEY}}
-  #       with:
-  #         command: monitor
+  opensource-monitor:
+    needs: [ opensource-security, code-security ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_KEY}}
+        with:
+          command: monitor
 
-  # Docker_push:
-  #     needs: [opensource-monitor]
-  #     runs-on: ubuntu-latest
+  Docker_push:
+      needs: [opensource-monitor]
+      runs-on: ubuntu-latest
   
-  #     steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
      
-  #     - name: Download artifact
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #           name: coffeshopartifact
-  #           path: ./
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+            name: coffeshopartifact
+            path: ./
      
-  #     - name: Login to DockerHub
-  #       uses: docker/login-action@v2
-  #       with:
-  #           username: ${{ secrets.DOCKER_USERNAME }}
-  #           password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_TOKEN }}
      
-  #     - name: Build Container image
-  #       run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.run_number }} .
+      - name: Build Container image
+        run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.run_number }} .
      
-  #     - name: Publish Docker image
-  #       run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
+      - name: Publish Docker image
+        run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
  
-  # Deploy:
-  #     needs: Docker_push
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - name: Checkout Repository
-  #         uses: actions/checkout@v3
-  #         with:
-  #           repository: danielpraveenkumar/Deployment   # Replace with the repository URL
-  #           ref: main 
-  #           token: ${{secrets.PAT_TOKEN }}
+  Deploy:
+      needs: Docker_push
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v3
+          with:
+            repository: danielpraveenkumar/Deployment   # Replace with the repository URL
+            ref: main 
+            token: ${{secrets.PAT_TOKEN }}
 
-  #       - name: Modify Manifest
-  #         run: |
-  #             # Replace the image and tag in the manifest file
-  #             echo "GitHub Runnumber: ${{ github.run_number }}"
-  #             sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./manifest/deployment.yaml
+        - name: Modify Manifest
+          run: |
+              # Replace the image and tag in the manifest file
+              echo "GitHub Runnumber: ${{ github.run_number }}"
+              sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./manifest/deployment.yaml
         
-  #       - name: Debug - Show Git Status After Changes
-  #         run: git status
-  #         shell: bash
+        - name: Debug - Show Git Status After Changes
+          run: git status
+          shell: bash
   
-  #       - name: Commit and Push Change
-  #         run: |
-  #             git config --global user.name "DanielPraveenKumar"
-  #             git config --global user.email "danielpraveenkumar.k@gmail.com"
-  #             git add ./manifest/deployment.yaml
-  #             git commit -m "Update image tag"
-  #             git push origin main  
-  #         env:
-  #           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        - name: Commit and Push Change
+          run: |
+              git config --global user.name "DanielPraveenKumar"
+              git config --global user.email "danielpraveenkumar.k@gmail.com"
+              git add ./manifest/deployment.yaml
+              git commit -m "Update image tag"
+              git push origin main  
+          env:
+            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
