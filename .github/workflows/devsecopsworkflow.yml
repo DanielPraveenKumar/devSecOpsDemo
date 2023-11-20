@@ -34,11 +34,8 @@ jobs:
         
     - name: check talisman report
       run: |
-          ls talisman_report/talisman_reports/data
-          
-          echo "Index check"
-          find -name *.html
-    
+        echo 'talisman_report/talisman_reports/data/report.json' | jq '.results[] | select(.failure_list[].severity == "high")' > output.json
+  
     # - name: Upload Report
     #   uses: actions/upload-artifact@v3
     #   with:
@@ -50,7 +47,7 @@ jobs:
       if: always()
       with:
         message-path: |
-            talisman_report/talisman_reports/data/report.json
+            output.json
         
   # GGShield:
   #   runs-on: ubuntu-latest
