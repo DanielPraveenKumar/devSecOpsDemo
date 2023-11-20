@@ -31,13 +31,12 @@ jobs:
     - name: Get severity output
       run: |
         cat talisman_report/talisman_reports/data/report.json | jq '.results[] | select(.failure_list[].severity == "high")' > output.json
-  
+        echo '    Following are detected SECRETS!! To be fixed !    ' | cat - output.json > temp && mv temp output.json
+    
     - name: talisman report add to pr     
       uses: mshick/add-pr-comment@v2
       if: always()
       with:
-        message: |
-            Following are detected SECRETS!! To be fixed !
         message-path: |
             output.json
         repo-token: ${{ secrets.PAT_TOKEN }}
