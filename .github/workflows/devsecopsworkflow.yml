@@ -24,12 +24,18 @@ jobs:
           sudo mv talisman /usr/local/bin/
  
     - name: Run Talisman Check
-      run: talisman --scan
+      run: |
+        talisman --scan > talisman_report.txt
+        apt-get update && apt-get install pandoc
+        pandoc talisman_report.txt -o index.html
+        
+      
       
       continue-on-error: true
     - name: check talisman report
       run: |
           ls talisman_report/talisman_reports/data
+          
           echo "Index check"
           find -name *.html
           
