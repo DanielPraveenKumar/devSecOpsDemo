@@ -34,7 +34,7 @@ jobs:
         
     - name: check talisman report
       run: |
-        echo 'talisman_report/talisman_reports/data/report.json' | jq '.results[] | select(.failure_list[].severity == "high")' > output.json
+        cat talisman_report/talisman_reports/data/report.json | jq '.results[] | select(.failure_list[].severity == "high")' > output.json
   
     # - name: Upload Report
     #   uses: actions/upload-artifact@v3
