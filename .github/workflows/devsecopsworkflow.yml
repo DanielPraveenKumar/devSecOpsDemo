@@ -27,25 +27,17 @@ jobs:
       run: |
         talisman --scan  
       continue-on-error: true
-    # - name: Convert JSON to HTML Table
-    #   uses: Teebra/JSON-to-HTML-table@main
-    #   with:
-    #     json-file: talisman_report/talisman_reports/data/report.json
         
-    - name: check talisman report
+    - name: Get severity output
       run: |
         cat talisman_report/talisman_reports/data/report.json | jq '.results[] | select(.failure_list[].severity == "high")' > output.json
   
-    # - name: Upload Report
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #       name: "talisman-scan-report-${{ github.run_number }}"
-    #       path: talisman_report/talisman_reports/data
-    
     - name: talisman report add to pr     
       uses: mshick/add-pr-comment@v2
       if: always()
       with:
+        message: |
+            Following are detected SECRETS!! To be fixed !
         message-path: |
             output.json
         
