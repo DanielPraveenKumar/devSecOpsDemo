@@ -24,15 +24,25 @@ jobs:
           sudo mv talisman /usr/local/bin/
  
     - name: Run Talisman Check
-      run: talisman --scan 
+      run: talisman --scanWithHtml 
       continue-on-error: true
- 
+    - name: check talisman report
+      run: |
+          ls
+          find . -name *.html
+          
     - name: Upload Report
       uses: actions/upload-artifact@v3
       with:
           name: "talisman-scan-report-${{ github.run_number }}"
           path: talisman_report/talisman_reports/data
           
+    - name: HTML Preview
+      id: html_preview
+      uses: pavi2410/html-preview-action@v2
+      with:
+        html_file: 'index.html'
+        
   # GGShield:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -49,16 +59,16 @@ jobs:
   #           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
   #     continue-on-error: true
       
-  Build_and_test:
-    needs: pre_push_hook
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # Build_and_test:
+  #   needs: pre_push_hook
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
       
             
-    - name: Build Maven
-      run: mvn --batch-mode package --file pom.xml
+  #   - name: Build Maven
+  #     run: mvn --batch-mode package --file pom.xml
 
       
     # - name: Build
@@ -67,204 +77,204 @@ jobs:
     # - name: Test
     #   run: mvn --batch-mode -Dmaventest.failure.ignore=true test
 
-    - name: Report
-      uses: dorny/test-reporter@v1
-      if: always()
-      with:
-        name: Maven Tests
-        path: target/surefire-reports/*.xml
-        reporter: java-junit
-        fail-on-error: true
+  #   - name: Report
+  #     uses: dorny/test-reporter@v1
+  #     if: always()
+  #     with:
+  #       name: Maven Tests
+  #       path: target/surefire-reports/*.xml
+  #       reporter: java-junit
+  #       fail-on-error: true
         
         
-    - uses: actions/upload-artifact@v3
-      with:
-        name: coffeshopartifact
-        path: |
-          ./target/*.jar
+  #   - uses: actions/upload-artifact@v3
+  #     with:
+  #       name: coffeshopartifact
+  #       path: |
+  #         ./target/*.jar
           
-    - name: Upload JaCoCo coverage report
-      uses: actions/upload-artifact@v2
-      with:
-         name: jacoco-report
-         path: |
-           target/site/jacoco
-           target/surefire-reports
+  #   - name: Upload JaCoCo coverage report
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #        name: jacoco-report
+  #        path: |
+  #          target/site/jacoco
+  #          target/surefire-reports
 
 
-    - name: Add coverage to PR
-      id: jacoco
-      uses: juliusiglesia/jacoco-report-publisher@0.0.2
-      with:
-          report-paths: target/site/jacoco/jacoco.xml
-          github-token: ${{ secrets.PAT_TOKEN }}
-          min-overall-instructions-coverage: 20
-          min-overall-branch-coverage: 30
-          min-modified-files-instructions-coverage: 2
-          min-modified-files-branch-coverage: 70
+  #   - name: Add coverage to PR
+  #     id: jacoco
+  #     uses: juliusiglesia/jacoco-report-publisher@0.0.2
+  #     with:
+  #         report-paths: target/site/jacoco/jacoco.xml
+  #         github-token: ${{ secrets.PAT_TOKEN }}
+  #         min-overall-instructions-coverage: 20
+  #         min-overall-branch-coverage: 30
+  #         min-modified-files-instructions-coverage: 2
+  #         min-modified-files-branch-coverage: 70
           
-    # - name: Add coverage to PR
-    #   id: jacoco
-    #   uses: madrapps/jacoco-report@v1.6.1
-    #   with:
-    #       paths: |
-    #          target/site/jacoco/jacoco.xml
-    #       token: ${{ secrets.PAT_TOKEN }}
-    #       min-coverage-overall: 40
-    #       min-coverage-changed-files: 10
-    #       debug-mode: true
+  #   # - name: Add coverage to PR
+  #   #   id: jacoco
+  #   #   uses: madrapps/jacoco-report@v1.6.1
+  #   #   with:
+  #   #       paths: |
+  #   #          target/site/jacoco/jacoco.xml
+  #   #       token: ${{ secrets.PAT_TOKEN }}
+  #   #       min-coverage-overall: 40
+  #   #       min-coverage-changed-files: 10
+  #   #       debug-mode: true
 
-    # - name: Get the Coverage info
-    #   run: |
-    #     echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
-    #     echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-    # - name: Fail PR if overall coverage is less than 80%
-    #   if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 }}
-    #   uses: actions/github-script@v6
-    #   with:
-    #     script: |
-    #       core.setFailed('Overall coverage is less than 80%!')
-  # Snyk: 
-  #     needs: Build_and_test
+  #   # - name: Get the Coverage info
+  #   #   run: |
+  #   #     echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+  #   #     echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+  #   # - name: Fail PR if overall coverage is less than 80%
+  #   #   if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 }}
+  #   #   uses: actions/github-script@v6
+  #   #   with:
+  #   #     script: |
+  #   #       core.setFailed('Overall coverage is less than 80%!')
+  # # Snyk: 
+  # #     needs: Build_and_test
+  # #     runs-on: ubuntu-latest
+  # #     steps:
+  # #     - name: Checkout
+  # #       uses: actions/checkout@v3
+
+  # #     - name: Use Node.js 
+  # #       uses: actions/setup-node@v1
+  # #       with:
+  # #         node-version: 11.x
+   
+  # #     - name: Install Snyk CLI
+  # #       run: npm install -g snyk@1.1237.0 
+
+  # #     - name: Authenticate Snyk
+  # #       run: snyk auth ${{ secrets.SNYK_KEY }}
+
+  # #     - name: Run Snyk Test
+  # #       run: |
+  # #         snyk test --all-projects
+  # #         echo $?      
+  # #       continue-on-error: true
+        
+  # #     - name: snyk status
+  # #       run: |
+  # #         echo $?
+  # #         snyk_exit_status=$?
+  # #         if [ $snyk_exit_status -eq 0 ]; then
+  # #           echo "Snyk test passed, no vulnerabilities found."
+  # #         else
+  # #           echo "Snyk test failed, vulnerabilities found."
+  # #           exit 1
+  # #         fi
+ 
+
+   
+  # opensource-security:
+  #   needs: Build_and_test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Run Snyk to check for vulnerabilities
+  #       uses: snyk/actions/maven@master
+  #       continue-on-error: true
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
+
+  # code-security:
+  #   needs: [ opensource-security ]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Run Snyk to check for vulnerabilities
+  #       uses: snyk/actions/maven@master
+  #       continue-on-error: true
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
+  #       with:
+  #         command: code test
+
+  # opensource-monitor:
+  #   needs: [ opensource-security, code-security ]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Run Snyk to check for vulnerabilities
+  #       uses: snyk/actions/maven@master
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_KEY}}
+  #       with:
+  #         command: monitor
+  # Sbom:
+  #   needs: opensource-monitor
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
+   
+  #   - name: Generate SBOM
+  #     run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+
+  #   - name: Upload SBOM report to artifact
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #         name: "sbom-${{ github.run_number }}"
+  #         path: target/CycloneDX-Sbom.json
+          
+  # Docker_push:
+  #     needs: Sbom
   #     runs-on: ubuntu-latest
+  
   #     steps:
   #     - name: Checkout
   #       uses: actions/checkout@v3
-
-  #     - name: Use Node.js 
-  #       uses: actions/setup-node@v1
+     
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v3
   #       with:
-  #         node-version: 11.x
-   
-  #     - name: Install Snyk CLI
-  #       run: npm install -g snyk@1.1237.0 
-
-  #     - name: Authenticate Snyk
-  #       run: snyk auth ${{ secrets.SNYK_KEY }}
-
-  #     - name: Run Snyk Test
-  #       run: |
-  #         snyk test --all-projects
-  #         echo $?      
-  #       continue-on-error: true
-        
-  #     - name: snyk status
-  #       run: |
-  #         echo $?
-  #         snyk_exit_status=$?
-  #         if [ $snyk_exit_status -eq 0 ]; then
-  #           echo "Snyk test passed, no vulnerabilities found."
-  #         else
-  #           echo "Snyk test failed, vulnerabilities found."
-  #           exit 1
-  #         fi
+  #           name: coffeshopartifact
+  #           path: ./
+     
+  #     - name: Login to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #           username: ${{ secrets.DOCKER_USERNAME }}
+  #           password: ${{ secrets.DOCKER_TOKEN }}
+     
+  #     - name: Build Container image
+  #       run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.run_number }} .
+     
+  #     - name: Publish Docker image
+  #       run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
  
+  # Deploy:
+  #     needs: Docker_push
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - name: Checkout Repository
+  #         uses: actions/checkout@v3
+  #         with:
+  #           repository: danielpraveenkumar/Deployment   # Replace with the repository URL
+  #           ref: main 
+  #           token: ${{secrets.PAT_TOKEN }}
 
-   
-  opensource-security:
-    needs: Build_and_test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
-
-  code-security:
-    needs: [ opensource-security ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_KEY }}
-        with:
-          command: code test
-
-  opensource-monitor:
-    needs: [ opensource-security, code-security ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_KEY}}
-        with:
-          command: monitor
-  Sbom:
-    needs: opensource-monitor
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-   
-    - name: Generate SBOM
-      run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
-
-    - name: Upload SBOM report to artifact
-      uses: actions/upload-artifact@v3
-      with:
-          name: "sbom-${{ github.run_number }}"
-          path: target/CycloneDX-Sbom.json
-          
-  Docker_push:
-      needs: Sbom
-      runs-on: ubuntu-latest
-  
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-     
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-            name: coffeshopartifact
-            path: ./
-     
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_TOKEN }}
-     
-      - name: Build Container image
-        run: docker build -t ${{ secrets.DOCKER_REPO }}:${{ github.run_number }} .
-     
-      - name: Publish Docker image
-        run: docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
- 
-  Deploy:
-      needs: Docker_push
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v3
-          with:
-            repository: danielpraveenkumar/Deployment   # Replace with the repository URL
-            ref: main 
-            token: ${{secrets.PAT_TOKEN }}
-
-        - name: Modify Manifest
-          run: |
-              # Replace the image and tag in the manifest file
-              echo "GitHub Runnumber: ${{ github.run_number }}"
-              sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./manifest/deployment.yaml
+  #       - name: Modify Manifest
+  #         run: |
+  #             # Replace the image and tag in the manifest file
+  #             echo "GitHub Runnumber: ${{ github.run_number }}"
+  #             sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./manifest/deployment.yaml
         
-        - name: Debug - Show Git Status After Changes
-          run: git status
-          shell: bash
+  #       - name: Debug - Show Git Status After Changes
+  #         run: git status
+  #         shell: bash
   
-        - name: Commit and Push Change
-          run: |
-              git config --global user.name "DanielPraveenKumar"
-              git config --global user.email "danielpraveenkumar.k@gmail.com"
-              git add ./manifest/deployment.yaml
-              git commit -m "Update image tag"
-              git push origin main  
-          env:
-            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  #       - name: Commit and Push Change
+  #         run: |
+  #             git config --global user.name "DanielPraveenKumar"
+  #             git config --global user.email "danielpraveenkumar.k@gmail.com"
+  #             git add ./manifest/deployment.yaml
+  #             git commit -m "Update image tag"
+  #             git push origin main  
+  #         env:
+  #           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
