@@ -33,8 +33,8 @@ jobs:
         sudo apt-get install jq pandoc
         echo "started the JSON2HTML"
         cd talisman_report/talisman_reports/data
-        json_string=$(jq . report.json)
-        echo "$json_string" | pandoc -f json -s -o output.html
+        pandoc --version
+        pandoc -f json -t html -o output.html < report.json
         
     - name: check talisman report
       run: |
