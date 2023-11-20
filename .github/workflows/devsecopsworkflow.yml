@@ -25,21 +25,21 @@ jobs:
  
     - name: Run Talisman Check
       run: |
-        talisman --scan
+        talisman --scan  
+      continue-on-error: true
+    - name: covert to html
+      run: |
         apt-get install jq pandoc
         json_string=$(jq . talisman_report/talisman_reports/data/report.json)
-
-        # Convert JSON string to HTML using pandoc
         echo "$json_string" | pandoc -f json -s -o output.html
-      
-      continue-on-error: true
+        
     - name: check talisman report
       run: |
           ls talisman_report/talisman_reports/data
           
           echo "Index check"
           find -name *.html
-          
+    
     - name: Upload Report
       uses: actions/upload-artifact@v3
       with:
