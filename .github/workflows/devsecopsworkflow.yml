@@ -29,7 +29,8 @@ jobs:
       continue-on-error: true
     - name: covert to html
       run: |
-        apt-get install jq pandoc
+        sudo apt-get update
+        sudo apt-get install jq pandoc
         json_string=$(jq . talisman_report/talisman_reports/data/report.json)
         echo "$json_string" | pandoc -f json -s -o output.html
         
