@@ -27,10 +27,10 @@ jobs:
       run: |
         talisman --scan  
       continue-on-error: true
-    - name: Convert JSON to HTML Table
-      uses: Teebra/JSON-to-HTML-table@main
-      with:
-        json-file: talisman_report/talisman_reports/data/report.json
+    # - name: Convert JSON to HTML Table
+    #   uses: Teebra/JSON-to-HTML-table@main
+    #   with:
+    #     json-file: talisman_report/talisman_reports/data/report.json
         
     - name: check talisman report
       run: |
@@ -39,17 +39,18 @@ jobs:
           echo "Index check"
           find -name *.html
     
-    - name: Upload Report
-      uses: actions/upload-artifact@v3
+    # - name: Upload Report
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #       name: "talisman-scan-report-${{ github.run_number }}"
+    #       path: talisman_report/talisman_reports/data
+    
+    - name: talisman report add to pr     
+      uses: mshick/add-pr-comment@v2
+      if: always()
       with:
-          name: "talisman-scan-report-${{ github.run_number }}"
-          path: talisman_report/talisman_reports/data
-          
-    - name: HTML Preview
-      id: html_preview
-      uses: pavi2410/html-preview-action@v2
-      with:
-        html_file: 'output.html'
+        message-path: |
+            talisman_report/talisman_reports/data/report.json
         
   # GGShield:
   #   runs-on: ubuntu-latest
