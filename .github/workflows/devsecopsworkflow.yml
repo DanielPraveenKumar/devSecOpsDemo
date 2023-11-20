@@ -24,11 +24,13 @@ jobs:
           sudo mv talisman /usr/local/bin/
  
     - name: Run Talisman Check
-      run: talisman --scanWithHtml 
+      run: talisman --scan > index.html
+      
       continue-on-error: true
     - name: check talisman report
       run: |
           ls
+          cat index.html
           find . -name *.html
           
     - name: Upload Report
