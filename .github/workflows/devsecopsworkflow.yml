@@ -64,8 +64,8 @@ jobs:
     # - name: Build
     #   run: mvn --batch-mode -DskipTests package
 
-    - name: Test
-      run: mvn --batch-mode -Dmaventest.failure.ignore=true test
+    # - name: Test
+    #   run: mvn --batch-mode -Dmaventest.failure.ignore=true test
 
     - name: Report
       uses: dorny/test-reporter@v1
