@@ -159,25 +159,10 @@ jobs:
   #           exit 1
   #         fi
  
-  Sbom:
-    needs: Snyk
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-   
-    - name: Generate SBOM
-      run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
-
-    - name: Upload SBOM report to artifact
-      uses: actions/upload-artifact@v3
-      with:
-          name: "sbom-${{ github.run_number }}"
-          path: target/CycloneDX-Sbom.json
 
    
   opensource-security:
-    needs: [ Sbom ]
+    needs: Build_and_test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -211,9 +196,24 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_KEY}}
         with:
           command: monitor
+  Sbom:
+    needs: opensource-monitor
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+   
+    - name: Generate SBOM
+      run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
 
+    - name: Upload SBOM report to artifact
+      uses: actions/upload-artifact@v3
+      with:
+          name: "sbom-${{ github.run_number }}"
+          path: target/CycloneDX-Sbom.json
+          
   Docker_push:
-      needs: [opensource-monitor]
+      needs: Sbom
       runs-on: ubuntu-latest
   
       steps:
