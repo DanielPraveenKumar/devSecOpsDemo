@@ -26,10 +26,11 @@ jobs:
     - name: Run Talisman Check
       run: |
         talisman --scan
-        apt-get update && apt-get install pandoc
-        pandoc talisman_report.txt -o index.html
-        
-      
+        apt-get install jq pandoc
+        json_string=$(jq . talisman_report/talisman_reports/data/report.json)
+
+        # Convert JSON string to HTML using pandoc
+        echo "$json_string" | pandoc -f json -s -o output.html
       
       continue-on-error: true
     - name: check talisman report
@@ -49,7 +50,7 @@ jobs:
       id: html_preview
       uses: pavi2410/html-preview-action@v2
       with:
-        html_file: 'index.html'
+        html_file: 'output.html'
         
   # GGShield:
   #   runs-on: ubuntu-latest
