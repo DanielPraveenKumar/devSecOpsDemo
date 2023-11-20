@@ -40,6 +40,7 @@ jobs:
             Following are detected SECRETS!! To be fixed !
         message-path: |
             output.json
+        repo-token: ${{ secrets.PAT_TOKEN }}
         
   # GGShield:
   #   runs-on: ubuntu-latest
