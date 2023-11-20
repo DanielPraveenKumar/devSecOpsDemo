@@ -26,12 +26,16 @@ jobs:
     - name: Run Talisman Check
       run: talisman --scan > index.html
       
+    - name: talis check
+      run: talisman --scan
+      
       continue-on-error: true
     - name: check talisman report
       run: |
-          ls
+          ls talisman_report/talisman_reports/data
+          echo "Index check"
           cat index.html
-          find . -name *.html
+          find -name *.html
           
     - name: Upload Report
       uses: actions/upload-artifact@v3
