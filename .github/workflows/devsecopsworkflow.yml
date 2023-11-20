@@ -32,8 +32,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install jq pandoc
         echo "started the JSON2HTML"
-        jq empty_or_error < ./talisman_report/talisman_reports/data/report.json
-        json_string=$(jq . ./talisman_report/talisman_reports/data/report.json)
+        cd talisman_report/talisman_reports/data
+        json_string=$(jq . report.json)
         echo "$json_string" | pandoc -f json -s -o output.html
         
     - name: check talisman report
