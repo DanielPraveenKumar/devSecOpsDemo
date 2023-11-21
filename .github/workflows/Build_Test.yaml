@@ -1,7 +1,7 @@
 name: Build_test
 on:
-  workflow_dispatch:
   workflow_call:
+  pull_request:
   
 jobs:
   Build_and_test:
