@@ -42,6 +42,9 @@ jobs:
         message-path: |
             output.json
         repo-token: ${{ secrets.PAT_TOKEN }}
+        allow-repeats: true
+        refresh-message-position: true
+        
   
   # GGShield:
   #   runs-on: ubuntu-latest
