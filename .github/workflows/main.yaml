@@ -14,3 +14,8 @@ jobs:
       name: talisman
       uses: ./.github/workflows/talisman.yaml
       secrets: inherit
+    
+    Build_Test:
+      name: Build and Test
+      uses: ./.github/workflows/Build_Test.yaml
+      secrets: inherit
