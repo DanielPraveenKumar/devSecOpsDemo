@@ -4,13 +4,7 @@ on:
   workflow_call:
   
 jobs:
-  Snyk:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
   opensource-security:
-    # needs: Build_and_test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
