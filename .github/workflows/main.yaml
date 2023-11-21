@@ -1,6 +1,7 @@
 name: MAIN
 on:
   workflow_dispatch: 
+  push:
   
 permissions:
     checks: write
