@@ -1,23 +1,15 @@
-name: Talisman
+name: Build_test
 on:
   workflow_dispatch:
   workflow_call:
   
 jobs:
-  pre_push_hook:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-  
   Build_and_test:
-    needs: pre_push_hook
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
       
-            
     - name: Build Maven
       run: mvn --batch-mode package --file pom.xml
  
@@ -30,7 +22,6 @@ jobs:
         reporter: java-junit
         fail-on-error: true
         
-  
     - name: Upload to artifact
       uses: actions/upload-artifact@v3
       with:
@@ -45,7 +36,6 @@ jobs:
          path: |
            target/site/jacoco
            target/surefire-reports
-
 
     - name: Add coverage to PR
       id: jacoco
