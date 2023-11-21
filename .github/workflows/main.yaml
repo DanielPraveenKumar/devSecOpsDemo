@@ -1,0 +1,9 @@
+name: MAIN
+on:
+  workflow_dispatch: 
+
+jobs:
+    talisman:
+      name: talisman
+      uses: ./.github/workflows/talisman.yml
+      secrets: inherit
