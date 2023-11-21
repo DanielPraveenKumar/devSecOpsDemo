@@ -10,12 +10,39 @@ permissions:
     pull-requests: write
     
 jobs:
-    talisman:
-      name: talisman
+    Talisman:
+      name: Talisman
       uses: ./.github/workflows/talisman.yaml
       secrets: inherit
     
     Build_Test:
+      needs: Talisman
       name: Build and Test
       uses: ./.github/workflows/Build_Test.yaml
       secrets: inherit
+    
+    Snyk:
+      needs: Build_Test
+      name: Snyk_security check
+      uses: ./.github/workflows/Snyk.yaml
+      secrets: inherit
+     
+    Sbom:
+      needs: Snyk
+      name: Sbom
+      uses: ./.github/workflows/Sbom.yaml
+      secrets: inherit
+
+    Docker_build:
+      needs: Sbom
+      name: Docker build
+      uses: ./.github/workflows/Docker_build.yaml
+      secrets: inherit
+
+    Deployment:
+      needs: Docker_build
+      name: Deployment
+      uses: ./.github/workflows/Deployment.yaml
+      secrets: inherit
+    
+    
