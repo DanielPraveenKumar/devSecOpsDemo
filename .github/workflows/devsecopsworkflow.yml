@@ -2,8 +2,8 @@ name: DevSecOps Pipeline Demo
 on:
   workflow_dispatch:
   pull_request:
-    # branches:
-    #   - dev
+     branches:
+       - qa
 permissions:
     checks: write
     security-events: write
