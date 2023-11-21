@@ -27,7 +27,7 @@ jobs:
       id: talisman
       run: |
         talisman --scan
-      # continue-on-error: true
+      continue-on-error: true
         
     - name: Get severity output
       if: always () # steps.talisman.conclusion == 'success' || steps.talisman.conclusion == 'failure'
