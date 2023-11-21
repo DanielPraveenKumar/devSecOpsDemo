@@ -42,9 +42,11 @@ jobs:
         repo-token: ${{ secrets.PAT_TOKEN }}
     - name: Print secret output
       run: |
-        if grep -q '"severity":"high"' output.json; then
+        if jq -e '.results[] | select(.failure_list[].severity == "high")' output.json >/dev/null; then
             echo "High severity found. Exiting with code 1."
             exit 1
+        else
+            echo "There is no secret with hish severity"
         fi
   # GGShield:
   #   runs-on: ubuntu-latest
