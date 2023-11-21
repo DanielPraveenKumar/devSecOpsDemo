@@ -1,7 +1,14 @@
 name: MAIN
 on:
   workflow_dispatch: 
-
+  
+permissions:
+    checks: write
+    security-events: write
+    packages: write
+    actions: write
+    pull-requests: write
+    
 jobs:
     talisman:
       name: talisman
