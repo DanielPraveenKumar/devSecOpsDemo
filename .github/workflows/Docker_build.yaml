@@ -1,4 +1,4 @@
-name: Snyk
+name: Docker_build
 on:
   workflow_dispatch:
   workflow_call:
