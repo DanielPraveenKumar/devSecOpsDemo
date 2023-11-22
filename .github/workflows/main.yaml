@@ -3,9 +3,9 @@ on:
   workflow_dispatch: 
   pull_request:
     branches:
-      - '*'
-    paths-ignore:
-      - 'dev/**'   
+      - '!dev'
+    # paths-ignore:
+    #   - 'dev/**'   
 permissions:
     checks: write
     security-events: write
