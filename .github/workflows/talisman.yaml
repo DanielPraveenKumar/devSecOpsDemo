@@ -1,0 +1,40 @@
+name: Talisman
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+  
+jobs:
+  pre_push_hook:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+ 
+    - name: Install Talisman
+      run: |
+          wget https://github.com/thoughtworks/talisman/releases/latest/download/talisman_linux_amd64 -O talisman
+          chmod +x talisman
+          sudo mv talisman /usr/local/bin/
+ 
+    - name: Run Talisman Check
+      id: talisman
+      run: |
+        talisman --scan
+      continue-on-error: true
+        
+    - name: Get severity output
+      if: always () # steps.talisman.conclusion == 'success' || steps.talisman.conclusion == 'failure'
+      run: |
+        cat talisman_report/talisman_reports/data/report.json | jq '.results[] | select(.failure_list[].severity == "high")' > output.json
+        echo '     Following are detected SECRETS!! To be fixed !     ' | cat - output.json > temp && mv temp output.json
+        
+    - name: talisman report add to pr     
+      uses: mshick/add-pr-comment@v2
+      if: always ()
+      with:
+        message-path: |
+            output.json
+        repo-token: ${{ secrets.PAT_TOKEN }}
+        allow-repeats: true
+        refresh-message-position: true

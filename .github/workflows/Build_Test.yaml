@@ -1,0 +1,49 @@
+name: Build_test
+on:
+  workflow_call:
+  pull_request:
+  
+jobs:
+  Build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Build Maven
+      run: mvn --batch-mode package --file pom.xml
+ 
+    - name: Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Maven Tests
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
+        fail-on-error: true
+        
+    - name: Upload to artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: coffeshopartifact
+        path: |
+          ./target/*.jar
+          
+    - name: Upload JaCoCo coverage report
+      uses: actions/upload-artifact@v2
+      with:
+         name: jacoco-report
+         path: |
+           target/site/jacoco
+           target/surefire-reports
+
+    - name: Add coverage to PR
+      id: jacoco
+      uses: juliusiglesia/jacoco-report-publisher@0.0.2
+      with:
+          report-paths: target/site/jacoco/jacoco.xml
+          github-token: ${{ secrets.PAT_TOKEN }}
+          min-overall-instructions-coverage: 20
+          min-overall-branch-coverage: 30
+          min-modified-files-instructions-coverage: 2
+          min-modified-files-branch-coverage: 70

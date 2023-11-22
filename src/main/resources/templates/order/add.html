@@ -5,9 +5,9 @@
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
   </head>
   <body>
-    <div class="container">
+    <div class="container-body">
       <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-      <form th:action="@{/orders/add}" method="post" th:object="${order}">
+      <form th:action="@{/orders/add}" method="post" th:object="${order}" class="container">
         <input type="hidden" th:field="*{id}" />
         <div class="panel panel-default">
           <div class="panel-heading lead">Place Order</div>
@@ -74,6 +74,22 @@
           </fieldset>
         </div>
       </form>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <p> <a href="#">Expleo</a> © 2023 </p>
+          </div>
+          <div class="col-lg-6 text-end link">
+            <ul>
+              <li> <a href="#">Terms</a> </li>
+              <li> <a href="#">Privacy</a> </li>
+              <li> <a href="#">Support</a> </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
