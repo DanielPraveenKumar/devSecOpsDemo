@@ -2,7 +2,14 @@ name: Build_test
 on:
   workflow_call:
   pull_request:
-  
+
+permissions:
+    checks: write
+    security-events: write
+    packages: write
+    actions: write
+    pull-requests: write 
+    
 jobs:
   Build_and_test:
     runs-on: ubuntu-latest
