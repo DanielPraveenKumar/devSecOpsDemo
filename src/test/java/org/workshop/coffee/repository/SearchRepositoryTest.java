@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.runner.RunWith;
 
-
+ 
 @SpringBootTest
 public class SearchRepositoryTest {
     
