@@ -1,7 +1,14 @@
 name: MAIN
 on:
-  workflow_dispatch: 
-  
+  workflow_dispatch:
+  push:
+    branches:
+      - qa
+      - dev
+  pull_request:
+      branches:
+        - dev
+        
 permissions:
     checks: write
     security-events: write

@@ -1,8 +1,14 @@
 name: Build_test
 on:
-  workflow_dispatch:
   workflow_call:
-  
+
+permissions:
+    checks: write
+    security-events: write
+    packages: write
+    actions: write
+    pull-requests: write 
+    
 jobs:
   Build_and_test:
     runs-on: ubuntu-latest
@@ -21,6 +27,8 @@ jobs:
         path: target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
+      env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         
     - name: Upload to artifact
       uses: actions/upload-artifact@v3
