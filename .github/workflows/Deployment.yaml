@@ -13,12 +13,19 @@ jobs:
             repository: danielpraveenkumar/Deployment   # Replace with the repository URL
             ref: main 
             token: ${{secrets.PAT_TOKEN }}
-
+        - name: Git branch name
+          id: git-branch-name
+          uses: EthanSK/git-branch-name-action@v1
+          
+        - name: Echo the branch name
+          run: echo "Branch name ${GIT_BRANCH_NAME}"
+          
         - name: Modify Manifest
           run: |
               # Replace the image and tag in the manifest file
-              echo "GitHub Runnumber: ${{ github.run_number }}"
-              sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./manifest/deployment.yaml
+              echo "GitHub Runnumber: ${{ github.run_number }}" 
+              cd ${GIT_BRANCH_NAME}
+              sed -i "s|${{ secrets.DOCKER_REPO }}:.*|${{ secrets.DOCKER_REPO }}:${{ github.run_number }}|" ./deployment.yaml
         
         - name: Debug - Show Git Status After Changes
           run: git status
@@ -28,7 +35,7 @@ jobs:
           run: |
               git config --global user.name "DanielPraveenKumar"
               git config --global user.email "danielpraveenkumar.k@gmail.com"
-              git add ./manifest/deployment.yaml
+              git add .
               git commit -m "Update image tag"
               git push origin main  
           env:
