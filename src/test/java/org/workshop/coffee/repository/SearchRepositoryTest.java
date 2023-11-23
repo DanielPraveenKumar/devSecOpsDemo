@@ -67,6 +67,8 @@ public class SearchRepositoryTest {
         assertEquals(0, products.size());
     }
 
+   
+
        
     @Test
     public void testSearchProductWithXSSAttack() {
