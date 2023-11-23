@@ -2,7 +2,6 @@ name: Talisman
 on:
   workflow_dispatch:
   workflow_call:
-  pull_request:
   
 jobs:
   pre_push_hook:
