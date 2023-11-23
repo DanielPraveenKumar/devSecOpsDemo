@@ -1,7 +1,6 @@
 name: Build_test
 on:
   workflow_call:
-  pull_request:
 
 permissions:
     checks: write
