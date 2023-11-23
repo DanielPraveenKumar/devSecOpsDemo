@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.runner.RunWith;
 
- 
+
 @SpringBootTest
 public class SearchRepositoryTest {
     
@@ -67,7 +67,37 @@ public class SearchRepositoryTest {
         assertEquals(0, products.size());
     }
 
-   
+    @Test
+    public void testSearchProductWithSelectSQLInjection() {
+        // Assuming you have a SearchRepository class with a searchProduct method
+        //SearchRepository searchRepository = new SearchRepository();
+        
+        // Prepare the malicious input with SQL injection
+        String maliciousInput = "'; DROP TABLE Product; --";
+        
+        // Perform the select operation with the malicious input
+        List<Product> products = searchRepository.searchProduct("SELECT * FROM Product WHERE name = '" + maliciousInput + "'");
+        
+        // Assert that the result is empty due to SQL injection protection
+        assertNotNull(products);
+        assertEquals(0, products.size());
+    }
+
+    @Test
+    public void testSearchProductWithUpdateSQLInjection() {
+        // Assuming you have a SearchRepository class with a searchProduct method
+        // SearchRepository searchRepository = new SearchRepository();
+        
+        // Prepare the malicious input with SQL injection
+        String maliciousInput = "'; UPDATE Product SET price = 0 WHERE id = 1; --";
+        
+        // Perform the update operation with the malicious input
+        List<Product> products = searchRepository.searchProduct(maliciousInput);
+        
+        // Assert that the result is empty due to SQL injection protection
+        assertNotNull(products);
+        assertEquals(0, products.size());
+    }
 
        
     @Test
